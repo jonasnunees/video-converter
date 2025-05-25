@@ -6,15 +6,27 @@
 
 // Função que extrai apenas o nome do arquivo (sem caminho e sem extensão)
 const char *extrair_nome_arquivo(const char *caminho) {
-    char *caminho_dup = strdup(caminho); // Duplica o caminho para evitar modificar o original
-    if (!caminho_dup) return NULL;       // Verifica se a duplicação falhou
+    
+    // Duplica o caminho para evitar modificar o original
+    char *caminho_dup = strdup(caminho); 
+    
+    // Verifica se a duplicação falhou
+    if (!caminho_dup) return NULL;       
 
-    char *nome = basename(caminho_dup);  // Obtém o nome do arquivo (ex: video.mp4)
-    char *ponto = strrchr(nome, '.');    // Procura o último ponto (para remover a extensão)
-    if (ponto) *ponto = '\0';            // Se encontrar, substitui por '\0' para cortar a extensão
+    // Obtém o nome do arquivo (ex: video.mp4)
+    char *nome = basename(caminho_dup);  
+    
+    // Procura o último ponto (para remover a extensão)
+    char *ponto = strrchr(nome, '.');    
+    
+    // Se encontrar, substitui por '\0' para cortar a extensão
+    if (ponto) *ponto = '\0';            
 
-    char *resultado = strdup(nome);      // Duplica o nome limpo para retornar
-    free(caminho_dup);                   // Libera a memória usada pela duplicata
+    // Duplica o nome limpo para retornar
+    char *resultado = strdup(nome);      
+    
+    // Libera a memória usada pela duplicata
+    free(caminho_dup);                   
     return resultado;
 }
 
@@ -39,14 +51,19 @@ int verificar_ou_instalar_ffmpeg() {
     printf("Deseja instalar agora? (s/n): ");
     
     char resposta[4];
-    fgets(resposta, sizeof(resposta), stdin); // Lê a resposta do usuário
+    
+    // Lê a resposta do usuário
+    fgets(resposta, sizeof(resposta), stdin); 
     
     // Verifica se a resposta começa com 's' (sim)
     if (resposta[0] == 's' || resposta[0] == 'S') {
         printf("🔄 Instalando ffmpeg...\n");
+        
         // Executa o comando para instalar ffmpeg
         int resultado = system("sudo apt update && sudo apt install -y ffmpeg");
-        return (resultado == 0); // Retorna 1 se sucesso, 0 se falhar
+        
+        // Retorna 1 se sucesso, 0 se falhar
+        return (resultado == 0); 
     }
 
     // Usuário recusou a instalação
@@ -56,8 +73,10 @@ int verificar_ou_instalar_ffmpeg() {
 
 // Função principal que converte o vídeo
 int converter_video(const char *caminho_video, const char *formato) {
+    
     // Obtém o diretório HOME do usuário (ex: /home/usuario)
     char *home = getenv("HOME");
+    
     if (!home) {
         fprintf(stderr, "❌ Não foi possível obter o diretório HOME.\n");
         return 0;
@@ -65,6 +84,7 @@ int converter_video(const char *caminho_video, const char *formato) {
 
     // Extrai o nome do arquivo sem caminho e sem extensão
     const char *nome_arquivo = extrair_nome_arquivo(caminho_video);
+    
     if (!nome_arquivo) {
         fprintf(stderr, "❌ Nome do arquivo inválido.\n");
         return 0;
@@ -72,7 +92,9 @@ int converter_video(const char *caminho_video, const char *formato) {
 
     // Monta o caminho completo do novo arquivo convertido
     char destino[4096];
-    snprintf(destino, sizeof(destino), "%s/Downloads/%s.%s", home, nome_arquivo, formato + 2); // formato+2 pula o "--"
+    
+    // formato+2 pula o "--"
+    snprintf(destino, sizeof(destino), "%s/Downloads/%s.%s", home, nome_arquivo, formato + 2); 
 
     // Informa o início da conversão
     printf("🔄 Iniciando conversão para '%s'...\n", destino);
@@ -96,6 +118,7 @@ int converter_video(const char *caminho_video, const char *formato) {
 
 // Função principal que roda quando o programa é executado
 int main(int argc, char *argv[]) {
+    
     // Se o usuário passar --help, mostramos as instruções
     if (argc == 2 && strcmp(argv[1], "--help") == 0) {
         exibir_ajuda(argv[0]);
@@ -130,7 +153,9 @@ int main(int argc, char *argv[]) {
 
     // Verifica se o ffmpeg está disponível ou tenta instalá-lo
     if (!verificar_ou_instalar_ffmpeg()) {
-        return 1; // Falha ao instalar ou o usuário recusou
+        
+        // Falha ao instalar ou o usuário recusou
+        return 1; 
     }
 
     // Tenta realizar a conversão do vídeo
