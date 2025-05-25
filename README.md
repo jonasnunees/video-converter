@@ -13,6 +13,7 @@ Este é um programa de linha de comando feito em **C** que permite converter arq
   * AVI (`--avi`)
   * MPEG (`--mpeg`)
   * WEBM (`--webm`)
+
 * Salva os arquivos convertidos na pasta `~/Downloads`.
 
 ## Requisitos
@@ -33,14 +34,6 @@ Este é um programa de linha de comando feito em **C** que permite converter arq
 ```
 
 Isso converterá `meu_video.webm` para o formato MP4 e salvará o novo arquivo como `~/Downloads/meu_video.mp4`.
-
-## Formatos suportados
-
-* `--mp4`
-* `--mov`
-* `--avi`
-* `--mpeg`
-* `--webm`
 
 ## Ajuda
 
